@@ -9,12 +9,6 @@ import { faShekelSign } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-// import { getFirestore, collection, addDoc } from "firebase/firestore";
-// import {Cloudinary} from "@cloudinary/url-gen";
-
-
 export default function CarProfile() {
   const { id } = useParams();
   const [carNumber, setCarNumber] = useState("");
@@ -33,26 +27,9 @@ export default function CarProfile() {
   const [Km, setKm] = useState(0);
   const [Message, setMessage] = useState("");
   const [index, setIndex] = useState(0);
-  // const firebaseConfig = {
-  //   apiKey: "AIzaSyB-VpDq4zskYgPX5BnoezNqrL87eQBooHA",
-  //   authDomain: "bilalmotors-c2b0a.firebaseapp.com",
-  //   projectId: "bilalmotors-c2b0a",
-  //   storageBucket: "bilalmotors-c2b0a.appspot.com",
-  //   messagingSenderId: "1088002782140",
-  //   appId: "1:1088002782140:web:e17dedaf1d82b46ab8b1b9",
-  //   measurementId: "G-Y089K93Q2G"
-  // };
-  
-  // Initialize Firebase
-  // const app = initializeApp(firebaseConfig);
-  // const analytics = getAnalytics(app);
-  // const db = getFirestore(app);
-  // // const App = () => {
-  // //   const cld = new Cloudinary({cloud: {cloudName: 'dyvmpxrza'}});
-  // // };
-  // const handleSelect = (selectedIndex) => {
-  //   setIndex(selectedIndex);
-  // };
+  const handleSelect = (selectedIndex) => {
+    setIndex(selectedIndex);
+  };
 
   useEffect(() => {
     const fetchData = async () => {

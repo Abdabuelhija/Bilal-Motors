@@ -11,6 +11,10 @@ import Result from './SearchResult/ResultPage'
 
 function App() {
   const [user, setUser] = useState(localStorage.getItem('user'));
+// add env variables .
+// add import to images 
+// add server mongo/firbase 
+// change the website to hebrow .
 
   return (
       <>
