@@ -8,14 +8,13 @@ import LoginPage from './LoginPage/LoginPage'
 import CarProfile from './CarProfile/CarProfilePage';
 import Search from './Search/SearchPage';
 import Result from './SearchResult/ResultPage'
-
+import ResetPassword from './ResetPassword/ResetPassword';
 function App() {
   const [user, setUser] = useState(localStorage.getItem('user'));
 // add env variables .
 // add import to images 
-// add server mongo/firbase 
-// change the website to hebrow .
-
+// add MongoDB server .
+// change the website to hebrew .
   return (
       <>
       {user && (
@@ -32,6 +31,7 @@ function App() {
             <Route path="/Search/" element={user ? <Search/> : <Navigate to="/LoginPage" replace />} />
             <Route path="/Result/" element={user ? <Result/> : <Navigate to="/LoginPage" replace />} />
             <Route path="/LoginPage" element={<LoginPage setUser={setUser}/>}/>
+            <Route path="/ResetPassword" element={<ResetPassword/>}/>
         </Routes>
         </div>
       </>

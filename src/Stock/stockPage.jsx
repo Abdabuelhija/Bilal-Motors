@@ -2,126 +2,104 @@ import React, { useState, useEffect } from 'react';
 import './stockStyle.css';
 import '../GeneralStyles/Card.css';
 import { Link, NavLink } from 'react-router-dom';
-import {  useRef } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { faShekelSign } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { fetchAllCars } from '../CarService';
 
 export default function Stock() {
   document.title="Bilal Motors - All cars";
   const [cars, setCars] = useState([]);
-  const [show, setShow] = useState(false);
-  const handleClose = () => {
-    setShow(false);
-    window.location.reload();
-  }
-  const handleShow = () => setShow(true);
-  const [carNumber, setCarNumber] = useState("");
-  const [Name, setName] = useState("");
-  const [Year, setYear] = useState("");
-  const [Hand, setHand] = useState(0);
-  const [Capacity,setCapacity] = useState("");
-  const [EntranceDate, setEntranceDate] = useState("");
-  const [isSold, setIsSold] = useState(false);
-  const [CustomerName, setCustomerName] = useState(null);
-  const [SellingDate,setSellingDate] = useState(null);
-  const [Notes, setNotes] = useState("");
-  const [Img1, setImg1] = useState("");
-  const [Img2, setImg2] = useState("");
-  const [Price, setPrice] = useState(0);
-  const [Km,setKm] = useState(0);
+  const [displayedCars, setDisplayedCars] = useState([]);  
   const [Message, setMessage] = useState("");
+  const [AddCarshow, setAddCarshow] = useState(false);
+  const handleAddCarShow = () => setAddCarshow(true);
+  const handleAddCarClose = () => {
+    setAddCarshow(false);
+    setMessage("");
+  }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const shoeData = {
-      carNumber,
-      Name,
-      Year,
-      Hand,
-      Capacity,
-      EntranceDate,
-      isSold,
-      CustomerName,
-      SellingDate,
-      Notes,
-      Img1,
-      Img2,
-      Price,
-      Km
-    }; 
-    try {
-      const response = await axios.post('https://64620338491f9402f4b02aa1.mockapi.io/Cars', shoeData);
-      console.log(response.data); 
-      setMessage("New car inserted successfully");
-      // setShow(false);
-    } catch (error) {
-      console.error(error);
-      setMessage("Failed to insert new car");
-    }
+  const [car, setCar] = useState({
+    carNumber: "",
+    Name: "",
+    Year: "",
+    Hand: 0,
+    Capacity: "",
+    EntranceDate: "",
+    isSold: false,
+    CustomerName: "",
+    SellingDate: "",
+    Notes: "",
+    Img1: "",
+    Img2: "",
+    Price: 0,
+    Km: 0,
+  });
+
+  const handleInputChange = (event) => {
+    setCar({
+      ...car,
+      [event.target.name]: event.target.value
+    });
   };
 
-  useEffect(() => {
-    async function fetchCars() {
-      const response = await axios.get('https://64620338491f9402f4b02aa1.mockapi.io/Cars');
-      const StockCars = response.data.filter(car => !car.isSold);
-      setCars(StockCars);
-    }
-    fetchCars();
-  }, []);
+const handleAddCarSubmit = async (event) => {
+  event.preventDefault();
+  try {
+    const response = await addCar(car);
+    console.log(response); 
+    setMessage("New car inserted successfully");
+  } catch (error) {
+    console.error(error);
+    setMessage("Failed to insert new car");
+  }
+};
+
+useEffect(() => {
+  async function fetchAndSetCars() {
+    const allCars = await fetchAllCars();
+    const StockCars = allCars.filter(car => !car.isSold);
+    setCars(StockCars);
+    setDisplayedCars(StockCars);  
+  }
+  fetchAndSetCars();
+}, []);
 
   const ShowAllCars = async (event) => {
     event.preventDefault();
-    async function fetchCars() {
-      const response = await axios.get('https://64620338491f9402f4b02aa1.mockapi.io/Cars');
-      const StockCars = response.data.filter(car => !car.isSold);
-      setCars(StockCars);
-    }
-    fetchCars();
-  }
-
-  const ShowByEntranceDate = async (event) => {
-    event.preventDefault();
-    async function fetchCars() {
-      const response = await axios.get('https://64620338491f9402f4b02aa1.mockapi.io/Cars');
-      const StockCars = response.data.filter(car => !car.isSold);
-      const sortedData =StockCars.sort((a, b) =>  new Date(b.EntranceDate) -  new Date(a.EntranceDate)); 
-      setCars(sortedData);
-    }
-    fetchCars();
+    setDisplayedCars(cars);  
   }
   
-
+  const ShowByEntranceDate = async (event) => {
+    event.preventDefault();
+    const sortedData =[...cars].sort((a, b) =>  new Date(b.EntranceDate) -  new Date(a.EntranceDate)); 
+    setDisplayedCars(sortedData);
+  }
+  
   const ShowByPrice = async (event) => {
     event.preventDefault();
-    async function fetchCars() {
-      const response = await axios.get('https://64620338491f9402f4b02aa1.mockapi.io/Cars');
-      const StockCars = response.data.filter(car => !car.isSold);
-      const sortedData =StockCars.sort((a, b) => b.Price - a.Price); 
-      setCars(sortedData);
-    }
-    fetchCars();
+      const sortedData =[...cars].sort((a, b) => b.Price - a.Price); 
+      setDisplayedCars(sortedData);
   }
   
 
   return (
     <>
-      <div class="buttons">
-    <button class="orginal-button" onClick={ShowAllCars}>All</button>
-    <button class="Entrance-button" onClick={ShowByEntranceDate}>Filter By Entrance Date</button>
-    <button class="Entrance-button" onClick={ShowByPrice}>Filter By Price</button>
-    <button class="Add-car" onClick={handleShow} ><FontAwesomeIcon icon={faPlus} style={{Year: "#ffffff",}} /> Add Car </button>
+      <div  className="buttons">
+    <button className="orginal-button" onClick={ShowAllCars}>All</button>
+    <button className="Entrance-button" onClick={ShowByEntranceDate}>Filter By Entrance Date</button>
+    <button className="Entrance-button" onClick={ShowByPrice}>Filter By Price</button>
+    <button className="Add-car" onClick={handleAddCarShow} ><FontAwesomeIcon icon={faPlus} style={{Year: "#ffffff",}} /> Add Car </button>
     </div>
 
     <br/><br/><br/>
-    <div class="Cars">
-    {cars.map((car) => (
+    <div className="Cars">
+    {displayedCars.map((car) => (
       <Link to={`/CarProfile/${car.id}`} style={{ color: 'black', textDecoration: 'none' }}>
-        <div class="Carcard">
+        <div className="Carcard">
           <img className='Cardimg' src={car.Img1} alt={car.Name}/>
-          <div class="container">
+          <div className="container">
             <span className="CarName" style={{fontSize:'15px'}}><b>{car.Name}</b></span>
             <span><b>Year : </b>{car.Year}</span>
             <span><b>hand : </b>{car.Hand} </span>
@@ -133,60 +111,59 @@ export default function Stock() {
     ))}
   </div>
 
-  <Modal show={show} onHide={handleClose} animation={false}>
+  <Modal show={AddCarshow} onHide={handleAddCarClose} animation={false}>
   <Modal.Header closeButton>
     <Modal.Title><br/><h1>Add car</h1></Modal.Title>
-    <br/>
-    {Message && <small style={{color:'green'}}>{Message}</small>}
   </Modal.Header>
   <Modal.Body>
-    <form class="row" onSubmit={handleSubmit}>
-      <div class="form-group col-md-6">
+    {Message && <small style={{color:'green'}}>{Message}</small>}
+    <form className="row" onSubmit={handleAddCarSubmit}>
+      <div className="form-group col-md-6">
         <label for="inputEmail4">Name</label>
-        <input type="text" class="form-control" id="inputName" placeholder="Mazda 3" onChange={(event) => setName(event.target.value)} required/>
+        <input type="text" className="form-control" id="inputName" placeholder="Mazda 3" name="Name" value={car.Name} onChange={handleInputChange} required/>
       </div>
-      <div class="form-group col-md-6">
+      <div className="form-group col-md-6">
         <label for="inputEmail4">Year</label>
-        <input type="text" class="form-control" id="inputYear" placeholder="2023" onChange={(event) => setYear(event.target.value)} required/>
+        <input type="text" className="form-control" id="inputYear" placeholder="2023" name="Year" value={car.Year} onChange={handleInputChange} required/>
       </div>
-      <div class="form-group col-md-6">
+      <div className="form-group col-md-6">
         <label for="inputEmail4">Hand</label>
-        <input type="number" class="form-control" id="inputHand" placeholder="01" onChange={(event) => setHand(event.target.value)} required/>
+        <input type="number" className="form-control" id="inputHand" placeholder="01" name="Hand" value={car.Hand} onChange={handleInputChange} required/>
       </div>
-      <div class="form-group col-md-6">
+      <div className="form-group col-md-6">
         <label for="inputPassword4">Capacity</label>
-        <input type="text" class="form-control" id="inputSizes" placeholder="2000cc" onChange={(event) => setCapacity(event.target.value)} required/>
+        <input type="text" className="form-control" id="inputSizes" placeholder="2000cc" name="Capacity" value={car.Capacity} onChange={handleInputChange} required/>
       </div>
-      <div class="form-group col-md-6">
+      <div className="form-group col-md-6">
         <label for="inputEmail4">EntranceDate</label>
-        <input type="date" class="form-control" id="inputEntranceDate" placeholder="EntranceDate" onChange={(event) => setEntranceDate(event.target.value)} required/>
+        <input type="date" className="form-control" id="inputEntranceDate" placeholder="EntranceDate" name="EntranceDate" value={car.EntranceDate} onChange={handleInputChange} required/>
       </div>
-      <div class="form-group col-md-6">
+      <div className="form-group col-md-6">
         <label for="inputEmail4">Price</label>
-        <input type="number" class="form-control" id="inputPrice" placeholder="50,000" onChange={(event) => setPrice(event.target.value)} required/>
+        <input type="number" className="form-control" id="inputPrice" placeholder="50,000" name="Price" value={car.Price} onChange={handleInputChange} required/>
       </div>
-      <div class="form-group col-md-6">
+      <div className="form-group col-md-6">
         <label for="inputEmail4">Km</label>
-        <input type="number" class="form-control" id="inputKm" placeholder="20000" onChange={(event) => setKm(event.target.value)} required/>
+        <input type="number" className="form-control" id="inputKm" placeholder="20000" name="Km" value={car.Km} onChange={handleInputChange} required/>
       </div>
-      <div class="form-group col-md-6">
+      <div className="form-group col-md-6">
         <label for="inputEmail4">Car Number</label>
-        <input type="text" class="form-control" id="CarNumber" placeholder="12345234" onChange={(event) => setCarNumber(event.target.value)} required/>
+        <input type="text" className="form-control" id="CarNumber" placeholder="12345234" name="carNumber" value={car.carNumber} onChange={handleInputChange} required/>
       </div>
-      <div class="form-group col-md-12">
+      <div className="form-group col-md-12">
         <label for="inputEmail4">Notes</label>
-        <input type="text" class="form-control" id="Notes" placeholder="Test util 2024" onChange={(event) => setNotes(event.target.value)} required/>
+        <input type="text" className="form-control" id="Notes" placeholder="Test util 2024" name="Notes" value={car.Notes} onChange={handleInputChange} required/>
       </div>
-      <div class="form-group col-md-12">
+      <div className="form-group col-md-12">
         <label for="inputAddress">image1 url</label>
-        <input type="text" class="form-control" id="Img1" placeholder="https://static.nike.com/a/images/t_PDP_1728_v1/" onChange={(event) => setImg1(event.target.value)} required/>
+        <input type="text" className="form-control" id="Img1" placeholder="https://static.nike.com/a/images/t_PDP_1728_v1/" name="Img1" value={car.Img1} onChange={handleInputChange} required/>
       </div>
-      <div class="form-group col-md-12">
+      <div className="form-group col-md-12">
         <label for="inputAddress">image2 url</label>
-        <input type="text" class="form-control" id="Img2" placeholder="https://static.nike.com/a/images/t_PDP_1728_v1/" onChange={(event) => setImg2(event.target.value)} required/>
+        <input type="text" className="form-control" id="Img2" placeholder="https://static.nike.com/a/images/t_PDP_1728_v1/" name="Img2" value={car.Img2} onChange={handleInputChange} required/>
       </div>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleAddCarClose}>
           Close
         </Button>
         <Button variant="primary" type="submit">Add car</Button>

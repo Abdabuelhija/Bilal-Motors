@@ -10,37 +10,43 @@ import { faShekelSign } from '@fortawesome/free-solid-svg-icons';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Logo from '../GeneralStyles/Logo.png';
-
+import { fetchAllCars } from '../CarService';
 export default function SearchPage() {
   document.title = "Bilal Motors - Search";
   const [cars, setCars] = useState([]);
   const [carNum, setCarNum] = React.useState("");
   const [carName, setCarName] = React.useState("");
   const [customer, setCustomer] = React.useState("");
+  const [displayedCars, setDisplayedCars] = useState([]);  
 
+  useEffect(() => {
+    async function fetchAndSetCars() {
+      const allCars = await fetchAllCars();
+      setCars(allCars); 
+    }
+    fetchAndSetCars();
+  }, []);
 
   const Search = async (event) => {
     event.preventDefault();
     async function fetchCars() {
-      const response = await axios.get('https://64620338491f9402f4b02aa1.mockapi.io/Cars');
-      let carsData = response.data;
+      let filteredCars = [...cars]; 
       if(carNum !== "") {
-        carsData = carsData.filter(car => car.carNumber.includes(carNum));
+        filteredCars = filteredCars.filter(car => car.carNumber.includes(carNum));
       }
       if(carName !== "") {
-        carsData = carsData.filter(car => car.Name.toLowerCase().includes(carName.toLowerCase()));
+        filteredCars = filteredCars.filter(car => car.Name.toLowerCase().includes(carName.toLowerCase()));
       }
       if(customer !== "") {
-        carsData = carsData.filter(car => car.CustomerName.toLowerCase().includes(customer.toLowerCase()));
+        filteredCars = filteredCars.filter(car => car.CustomerName.toLowerCase().includes(customer.toLowerCase()));
       }
-  
-      setCars(carsData);
+      
+      setDisplayedCars(filteredCars);
     }
     fetchCars();
   }
   
   
-    
   return (
     <>
       <div className='searchGridBody'>
@@ -54,12 +60,12 @@ export default function SearchPage() {
         </form>
       </div>
       <div className='ResultDiv'>
-      <div class="Cars">
-    {cars.map((car) => (
+      <div className="Cars">
+    {displayedCars.map((car) => (
       <Link to={`/CarProfile/${car.id}`} style={{ color: 'black', textDecoration: 'none' }}>
-      <div class="Carcard">
+      <div className="Carcard">
         <img className='Cardimg' src={car.Img1} alt={car.Name}/>
-        <div class="container">
+        <div className="container">
           <span className="CarName" style={{fontSize:'15px'}}><b>{car.Name}</b></span>
           <span><b>Year : </b>{car.Year}</span>
           <span><b>hand : </b>{car.Hand} </span>

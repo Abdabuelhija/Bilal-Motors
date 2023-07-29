@@ -21,21 +21,21 @@ export default function ResultPage() {
   return (
     <>
       <h1>Result Here</h1>
-      <div class="buttons">
-    <button class="orginal-button">סדר רגיל</button>
-    <button class="Entrance-button" onclick="func()">סדר לפי תאריך כניסה למגרש</button>
-    <button class="Entrance-button" onclick="func()">סדר לפי תאריך מכירה</button>
+      <div className="buttons">
+    <button className="orginal-button">סדר רגיל</button>
+    <button className="Entrance-button" onclick="func()">סדר לפי תאריך כניסה למגרש</button>
+    <button className="Entrance-button" onclick="func()">סדר לפי תאריך מכירה</button>
         </div>
       <br/><br/><br/>
-        <div class="Cars">
+        <div className="Cars">
         {cars.map((car) => (
         <Link to={`/CarProfile/${car.ID}`} style={{ color: 'black', textDecoration: 'none' }}>
-          <div class="Carcard">
+          <div className="Carcard">
             <img className='Cardimg'
               src={car.Img1}
               alt={car.Name}
             />
-            <div class="container">
+            <div className="container">
               <span className="CarName" style={{fontSize:'15px'}}>
                 <b>{car.Name}</b>
               </span>
