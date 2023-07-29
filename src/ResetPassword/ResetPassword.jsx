@@ -10,6 +10,11 @@ export default function ResetPassword() {
     const [newPassword, setNewPassword] = useState("");
     const [mailSent, setMailSent] = useState(false);
     const [Message, setMessage] = useState("");
+    const formStyle = {
+        margin: '20px',
+        padding: '20px',
+        border: '1px solid black'
+    };
     const handleSendMail = async () => {
         const random = Math.floor(Math.random() * (3000 - 50 + 1) + 50);
         setRandomNumber(random);
@@ -53,7 +58,7 @@ export default function ResetPassword() {
             {mailSent && 
                 <div>
                     We sent you a number in the email, type it here :
-                    <form onSubmit={validateNumber}>
+                    <form style={formStyle} onSubmit={validateNumber}>
                         <label> The number that you received: </label>
                         <br/>
                         <input type="text" onChange={e => setuserRandomInput(e.target.value)} />
@@ -63,7 +68,7 @@ export default function ResetPassword() {
                 </div>
             }
             {isVerified &&
-                <form onSubmit={handleResetPassword}>
+                <form style={formStyle} onSubmit={handleResetPassword}>
                     <label>Reset password</label>
                     <input
                         type="password"
