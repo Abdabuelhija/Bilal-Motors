@@ -15,8 +15,8 @@ export default function CarProfile() {
   const [Message, setMessage] = useState("");
   const handleSelect = (selectedIndex) => {
     setIndex(selectedIndex);
-  };
-  
+  }; 
+  const [oldCar,setOldCar]=useState(null);
   const [car, setCar] = useState({
     carNumber: "",
     Name: "",
@@ -33,12 +33,12 @@ export default function CarProfile() {
     Price: 0,
     Km: 0,
   });
-
   useEffect(() => {
     const fetchCar = async () => {
       const fetchedCar = await getCarById(id);
       if (fetchedCar) {
         setCar(fetchedCar);
+        setOldCar(fetchedCar);
         document.title = `Bilal Motors - ${fetchedCar.Name}`;
       }
     };
@@ -50,7 +50,7 @@ export default function CarProfile() {
   const handleUpdateModalClose = () => {
     setshowUpdateModal(false);
     setMessage("");
-  
+    setCar(oldCar);
   }
   const handleUpdateModalShow = () => setshowUpdateModal(true);
   const updateCarDetails = async (event) => {
@@ -71,6 +71,7 @@ export default function CarProfile() {
   const handleDeleteModalClose = () => {
     setshowDeleteModal(false);
     setMessage("");
+    setCar(oldCar);
   }
   const handleDeleteModalShow = () => setshowDeleteModal(true);
   const SoldCar = async (event) => {
@@ -111,47 +112,47 @@ export default function CarProfile() {
             </div>
 
             <div class="form-group col-md-6">
-              <label for="inputYear">Year</label>
-              <input type="text" class="form-control" id="inputYear" value={car.Year} onChange={handleInputChange} required />
+              <label for="Year">Year</label>
+              <input type="text" class="form-control" id="Year" name="Year" value={car.Year} onChange={handleInputChange} required />
             </div>
 
             <div class="form-group col-md-6">
               <label for="inputHand">Hand</label>
-              <input type="number" class="form-control" id="inputHand" value={car.Hand} onChange={handleInputChange} required />
+              <input type="number" class="form-control" name="Hand" id="inputHand" value={car.Hand} onChange={handleInputChange} required />
             </div>
 
             <div class="form-group col-md-6">
               <label for="inputCapacity">Capacity</label>
-              <input type="text" class="form-control" id="inputCapacity" value={car.Capacity} onChange={handleInputChange} required />
+              <input type="text" class="form-control" name="Capacity" id="inputCapacity" value={car.Capacity} onChange={handleInputChange} required />
             </div>
 
             <div class="form-group col-md-6">
               <label for="inputKm">Km</label>
-              <input type="text" class="form-control" id="inputKm" value={car.Km} onChange={handleInputChange} required />
+              <input type="text" class="form-control" name="Km" id="inputKm" value={car.Km} onChange={handleInputChange} required />
             </div>
 
             <div class="form-group col-md-6">
               <label for="inputPrice">Price</label>
-              <input type="text" class="form-control" id="inputPrice" value={car.Price} onChange={handleInputChange} required />
+              <input type="text" class="form-control" name="Price" id="inputPrice" value={car.Price} onChange={handleInputChange} required />
             </div>
 
             <div class="form-group col-md-12">
               <label for="inputPrice">car number</label>
-              <input type="text" class="form-control" id="inputPrice" value={car.carNumber} onChange={handleInputChange} required />
+              <input type="text" class="form-control" name="carNumber" id="inputPrice" value={car.carNumber} onChange={handleInputChange} required />
             </div>
 
             <div class="form-group col-md-12">
               <label for="inputNotes">Notes</label>
-              <input type="text" class="form-control" id="Notes" value={car.Notes} onChange={handleInputChange} required />
+              <input type="text" class="form-control" name="Notes" id="Notes" value={car.Notes} onChange={handleInputChange} required />
             </div>
 
             <div class="form-group col-md-12">
               <label for="inputImg1">image1 url</label>
-              <input type="text" class="form-control" id="inputImg1" value={car.Img1} onChange={handleInputChange} required />
+              <input type="text" class="form-control" name="Img1" id="inputImg1" value={car.Img1} onChange={handleInputChange} required />
             </div>
             <div class="form-group col-md-12">
               <label for="inputImg2">image2 url</label>
-              <input type="text" class="form-control" id="inputImg2" value={car.Img2} onChange={handleInputChange} required />
+              <input type="text" class="form-control"  name="Img2" id="inputImg2" value={car.Img2} onChange={handleInputChange} required />
             </div>
 
             <Modal.Footer>
@@ -168,16 +169,16 @@ export default function CarProfile() {
           <Modal.Title>Delete Informations</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {Message && <small style={{ color: 'red' }}>{Message}</small>}
+        {Message && <small style={{ color: 'green' }}>{Message}</small>}
 
           <form class="row" onSubmit={SoldCar}>
             <div class="form-group col-md-6">
               <label for="inputImg1">Customer Name </label>
-              <input type="text" class="form-control" id="inputImg1" value={car.CustomerName} onChange={handleInputChange} required />
+              <input type="text" class="form-control" id="inputImg1" name="CustomerName" value={car.CustomerName} onChange={handleInputChange} required />
             </div>
             <div class="form-group col-md-6">
               <label for="inputImg1">Selling Date  </label>
-              <input type="date" class="form-control" id="inputImg1" value={car.SellingDate} onChange={handleInputChange} required />
+              <input type="date" class="form-control" id="inputImg1" name="SellingDate" value={car.SellingDate} onChange={handleInputChange} required />
             </div>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleDeleteModalClose}>
