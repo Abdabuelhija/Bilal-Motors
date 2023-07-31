@@ -6,7 +6,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { fetchAllCars, addCar} from '../CarService';
+import { fetchAllCars, addCar,updateIsSold_toTrue} from '../CarService';
 
 export default function Stock() {
   document.title = "Bilal Motors - All cars";
@@ -34,7 +34,7 @@ export default function Stock() {
     Img1: "",
     Img2: "",
     Price: 0,
-    Km: 0,
+    Km: 0
   });
 
   const handleInputChange = (event) => {
@@ -47,13 +47,17 @@ export default function Stock() {
   const handleAddCarSubmit = async (event) => {
     event.preventDefault();
     const response = await addCar(car);
-    if (response) {
+    if (response===true) {
       setCars(cars => [...cars, car]);
       setDisplayedCars(displayedCars => [...displayedCars, car]);
       setMessage(<small style={{ color: 'green' }}>New car inserted successfully</small>);
     }
+    else if (response===-1){
+      setMessage(<small style={{ color: 'red' }}>The Car Already Exist in the sold car , Do you Want to put it on the stock back ?</small>);
+      setshowCarExistModal(true);
+    }
     else {
-      setMessage(<small style={{ color: 'red' }}>the car already exist.</small>);
+      setMessage(<small style={{ color: 'red' }}>The Car Already Exist.</small>);
     }
   }
 
@@ -67,6 +71,7 @@ export default function Stock() {
     }
     fetchAndSetCars();
   }, []);
+  
 
   const ShowAllCars = async (event) => {
     event.preventDefault();
@@ -84,6 +89,23 @@ export default function Stock() {
     const sortedData = [...cars].sort((a, b) => b.Price - a.Price);
     setDisplayedCars(sortedData);
   }
+  // for car exist Modal 
+  const [showCarExistModal, setshowCarExistModal] = useState(false);
+  const handleCarExistModalClose = () => {
+    setshowCarExistModal(false);
+    setMessage("");
+  }
+  const ResetTheCarToStock = async (event) => {
+  const response = await updateIsSold_toTrue(car);
+  if (response) {
+    setMessage(<small style={{ color: 'green' }}>The car rested successfully</small>);
+  }
+  else {
+    setMessage(<small style={{ color: 'red' }}>Error 404</small>);
+  }
+  }
+
+
 
 
   return (
@@ -171,6 +193,22 @@ export default function Stock() {
               <Button variant="primary" type="submit">Add car</Button>
             </Modal.Footer>
           </form>
+        </Modal.Body>
+      </Modal>
+
+            {/* Car Exist Modal */}
+          <Modal show={showCarExistModal} onHide={handleCarExistModalClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Reset Car </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        {Message && <small style={{ color: 'red' }}>{Message}</small>}
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCarExistModalClose} style={{ '--bs-btn-bg': 'red', '--bs-btn-hover-bg': 'red', '--bs-btn-border-Year': 'red' }}> 
+                No
+              </Button>
+              <Button variant="primary"  onClick={ResetTheCarToStock} style={{ '--bs-btn-bg': 'green', '--bs-btn-hover-bg': 'green', '--bs-btn-border-Year': 'green' }} >Yes</Button>
+            </Modal.Footer>
         </Modal.Body>
       </Modal>
     </>

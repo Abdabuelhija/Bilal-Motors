@@ -11,7 +11,7 @@ import Result from './SearchResult/ResultPage'
 import ResetPassword from './ResetPassword/ResetPassword';
 function App() {
   const [user, setUser] = useState(localStorage.getItem('user'));
-  // add MongoDB server .
+// add MongoDB server .
 // add import to images 
 // add env variables .
 // change the website to hebrew .
