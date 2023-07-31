@@ -1,8 +1,6 @@
 import axios from "axios";
 const API = "https://64620338491f9402f4b02aa1.mockapi.io/Cars";
 
-
-
 export async function fetchAllCars() {
   const response = await axios.get(`${API}`);
   return response.data;
@@ -58,6 +56,13 @@ export const updateIsSold_toTrue = async (car) => {
     const carData = response.data;
     if (carData.length === 1) {
       carData[0].isSold = false;
+      carData[0].Hand=car.Hand;
+      carData[0].EntranceDate=car.EntranceDate;
+      carData[0].CustomerName="";
+      carData[0].SellingDate="";
+      carData[0].Notes=car.Notes;
+      carData[0].Price=car.Price;
+      carData[0].Km=car.Km;
       await axios.put(`${API}/${carData[0].id}`, carData[0]);
       return true;
     }

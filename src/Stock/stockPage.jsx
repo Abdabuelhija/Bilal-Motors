@@ -197,7 +197,7 @@ export default function Stock() {
       </Modal>
 
             {/* Car Exist Modal */}
-          <Modal show={showCarExistModal} onHide={handleCarExistModalClose} animation={false}>
+          <Modal style={{marginTop:'100px'}} show={showCarExistModal} onHide={handleCarExistModalClose} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Reset Car </Modal.Title>
         </Modal.Header>
