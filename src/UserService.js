@@ -22,7 +22,7 @@ export const checkPassword = async (password) => {
 // export const checkPassword = async (password) => {
 //     try {
 //         const response = await axios.get(`${API}`);
-//         if (response.data.password === password) { 
+//         if (response.data.password or response.data[0].password === password) { 
 //             const user = {
 //                 Email: response.data.Email,
 //                 Password: response.data.password

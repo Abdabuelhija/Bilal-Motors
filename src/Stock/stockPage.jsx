@@ -6,7 +6,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { fetchAllCars, addCar,getCar } from '../CarService';
+import { fetchAllCars, addCar} from '../CarService';
 
 export default function Stock() {
   document.title = "Bilal Motors - All cars";
@@ -46,18 +46,17 @@ export default function Stock() {
 
   const handleAddCarSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const response = await addCar(car);
-      console.log(response); 
+    const response = await addCar(car);
+    if (response) {
       setCars(cars => [...cars, car]);
       setDisplayedCars(displayedCars => [...displayedCars, car]);
-      setMessage("New car inserted successfully");
-    } catch (error) {
-      console.error(error);
-      setMessage("Failed to insert new car");
+      setMessage(<small style={{ color: 'green' }}>New car inserted successfully</small>);
+    }
+    else {
+      setMessage(<small style={{ color: 'red' }}>the car already exist.</small>);
     }
   }
-  
+
 
   useEffect(() => {
     async function fetchAndSetCars() {
@@ -119,7 +118,7 @@ export default function Stock() {
           <Modal.Title><br /><h1>Add car</h1></Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {Message && <small style={{ color: 'green' }}>{Message}</small>}
+          {Message}
           <form className="row" onSubmit={handleAddCarSubmit}>
             <div className="form-group col-md-6">
               <label for="inputEmail4">Name</label>

@@ -18,9 +18,17 @@ export const getCarById = async (id) => {
 };
 
 export async function addCar(car) {
-  const response = await axios.post(`${API}`, car);
-  return response.data;
+  const searchCar = await axios.get(`${API}?carNumber=${car.carNumber}`);
+  if(searchCar.data[0]){
+    console.log("the car already exist.");
+    return false;
+  }
+  else{
+    const response = await axios.post(`${API}`, car);
+    return true ;
+  }
 }
+
 
 
 export const updateCarById = async (id, carData) => {
