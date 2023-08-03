@@ -26,7 +26,7 @@ export default function Navbar({ setUser }) {
   return (
     <MDBNavbar expand='lg' light bgColor='dark'>
       <MDBContainer fluid>
-        <MDBNavbarBrand href="/Stock" style={{color:'white'}}>Stock</MDBNavbarBrand>
+        <MDBNavbarBrand href="/Stock" style={{color:'white'}}>מלאי</MDBNavbarBrand>
         <MDBNavbarToggler
           type='button'
           aria-expanded='false'
@@ -38,13 +38,13 @@ export default function Navbar({ setUser }) {
         <MDBCollapse navbar show={showNav}>
           <MDBNavbarNav>
             <MDBNavbarItem>
-              <MDBNavbarLink href="/Sold" style={{color:'white'}}>Sold</MDBNavbarLink>
+              <MDBNavbarLink href="/Sold" style={{color:'white'}}>נמכר</MDBNavbarLink>
             </MDBNavbarItem>
             <MDBNavbarItem>
-              <MDBNavbarLink href='/Search' style={{color:'white'}}> <FontAwesomeIcon icon={faMagnifyingGlass} /> Search</MDBNavbarLink>
+              <MDBNavbarLink href='/Search' style={{color:'white'}}> <FontAwesomeIcon icon={faMagnifyingGlass} /> חיפוש</MDBNavbarLink>
             </MDBNavbarItem>
             <MDBNavbarItem>
-              <MDBNavbarLink onClick={handleLogout} href='/Search' style={{color:'white'}}> <FontAwesomeIcon icon={faRightFromBracket} /> Logout</MDBNavbarLink>
+              <MDBNavbarLink onClick={handleLogout} href='/Search' style={{color:'white'}}> <FontAwesomeIcon icon={faRightFromBracket} /> יציאה</MDBNavbarLink>
             </MDBNavbarItem>
           </MDBNavbarNav>
         </MDBCollapse>

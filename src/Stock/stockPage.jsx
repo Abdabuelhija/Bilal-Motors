@@ -6,7 +6,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { fetchAllCars, addCar,updateIsSold_toTrue} from '../CarService';
+import { fetchAllCars, addCar, updateIsSold_toFalse } from '../CarService';
 
 export default function Stock() {
   document.title = "Bilal Motors - All cars";
@@ -21,6 +21,7 @@ export default function Stock() {
   }
 
   const [car, setCar] = useState({
+    _id: "",
     carNumber: "",
     Name: "",
     Year: "",
@@ -47,17 +48,18 @@ export default function Stock() {
   const handleAddCarSubmit = async (event) => {
     event.preventDefault();
     const response = await addCar(car);
-    if (response===true) {
-      setCars(cars => [...cars, car]);
-      setDisplayedCars(displayedCars => [...displayedCars, car]);
-      setMessage(<small style={{ color: 'green' }}>New car inserted successfully</small>);
+    console.log("stock :" + response);
+    if (response) {
+      setMessage(<small style={{ color: 'green' }}>הוספת רכב בוצעה בהצלחה </small>);
+      setCars(cars => [...cars, response]);
+      setDisplayedCars(displayedCars => [...displayedCars, response]);
     }
-    else if (response===-1){
-      setMessage(<small style={{ color: 'red' }}>The Car Already Exist in the sold car , Do you Want to put it on the stock back ?</small>);
+    else if (response === -1) {
+      setMessage(<small style={{ color: 'red' }}>? הרכב נמצא ברכבים הנמכרים , אתה רוצה להחזיר אותו למלאי</small>);
       setshowCarExistModal(true);
     }
     else {
-      setMessage(<small style={{ color: 'red' }}>The Car Already Exist.</small>);
+      setMessage(<small style={{ color: 'red' }}>הרכב כבר נמצא במלאי</small>);
     }
   }
 
@@ -71,7 +73,7 @@ export default function Stock() {
     }
     fetchAndSetCars();
   }, []);
-  
+
 
   const ShowAllCars = async (event) => {
     event.preventDefault();
@@ -96,13 +98,16 @@ export default function Stock() {
     setMessage("");
   }
   const ResetTheCarToStock = async (event) => {
-  const response = await updateIsSold_toTrue(car);
-  if (response) {
-    setMessage(<small style={{ color: 'green' }}>The car rested successfully</small>);
-  }
-  else {
-    setMessage(<small style={{ color: 'red' }}>Error 404</small>);
-  }
+    const response = await updateIsSold_toFalse(car);
+    console.log(car._id);
+    if (response) {
+      setMessage(<small style={{ color: 'green' }}>הרכב נכנס למלאי</small>);
+      setCars(cars => [...cars, response]);
+      setDisplayedCars(displayedCars => [...displayedCars, response]);
+    }
+    else {
+      setMessage(<small style={{ color: 'red' }}>שגיאה , תתקשר לעבד</small>);
+    }
   }
 
 
@@ -111,24 +116,24 @@ export default function Stock() {
   return (
     <>
       <div className="buttons">
-        <button className="orginal-button" onClick={ShowAllCars}>All</button>
-        <button className="Entrance-button" onClick={ShowByEntranceDate}>Filter By Entrance Date</button>
-        <button className="Entrance-button" onClick={ShowByPrice}>Filter By Price</button>
-        <button className="Add-car" onClick={handleAddCarShow} ><FontAwesomeIcon icon={faPlus} style={{ Year: "#ffffff", }} /> Add Car </button>
+        <button className="orginal-button" onClick={ShowAllCars}>כל המלאי</button>
+        <button className="Entrance-button" onClick={ShowByEntranceDate}>סינון לפי תאיריך כניסה</button>
+        <button className="Entrance-button" onClick={ShowByPrice}>סינון לפי מחיר</button>
+        <button className="Add-car" onClick={handleAddCarShow} ><FontAwesomeIcon icon={faPlus} style={{ Year: "#ffffff", }} /> הוסף רכב </button>
       </div>
 
       <br /><br /><br />
       <div className="Cars">
         {displayedCars.map((car) => (
-          <Link to={`/CarProfile/${car.id}`} style={{ color: 'black', textDecoration: 'none' }}>
+          <Link to={`/CarProfile/${car._id}`} style={{ color: 'black', textDecoration: 'none' }}>
             <div className="Carcard">
               <img className='Cardimg' src={car.Img1} alt={car.Name} />
               <div className="container">
                 <span className="CarName" style={{ fontSize: '15px' }}><b>{car.Name}</b></span>
-                <span><b>Year : </b>{car.Year}</span>
-                <span><b>hand : </b>{car.Hand} </span>
-                <span><b>Capacity : </b>{car.Capacity} </span>
-                <span><b>Km : </b>{car.Km}</span>
+                <span><b>:שנה </b>{car.Year}</span>
+                <span><b>:יד </b>{car.Hand}</span>
+                <span><b>:נפח מנוע </b>{car.Capacity}</span>
+                <span><b>:קילומטראז' </b>{car.Km}</span>
               </div>
             </div>
           </Link>
@@ -137,45 +142,45 @@ export default function Stock() {
 
       <Modal show={AddCarshow} onHide={handleAddCarClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title><br /><h1>Add car</h1></Modal.Title>
+          <Modal.Title><br /><h1>הוספת רכה</h1></Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {Message}
           <form className="row" onSubmit={handleAddCarSubmit}>
             <div className="form-group col-md-6">
-              <label for="inputEmail4">Name</label>
+              <label for="inputEmail4">שם הרכב</label>
               <input type="text" className="form-control" id="inputName" placeholder="Mazda 3" name="Name" value={car.Name} onChange={handleInputChange} required />
             </div>
             <div className="form-group col-md-6">
-              <label for="inputEmail4">Year</label>
+              <label for="inputEmail4">שנה</label>
               <input type="text" className="form-control" id="inputYear" placeholder="2023" name="Year" value={car.Year} onChange={handleInputChange} required />
             </div>
             <div className="form-group col-md-6">
-              <label for="inputEmail4">Hand</label>
+              <label for="inputEmail4">יד</label>
               <input type="number" className="form-control" id="inputHand" placeholder="01" name="Hand" value={car.Hand} onChange={handleInputChange} required />
             </div>
             <div className="form-group col-md-6">
-              <label for="inputPassword4">Capacity</label>
+              <label for="inputPassword4">נפח</label>
               <input type="text" className="form-control" id="inputSizes" placeholder="2000cc" name="Capacity" value={car.Capacity} onChange={handleInputChange} required />
             </div>
             <div className="form-group col-md-6">
-              <label for="inputEmail4">EntranceDate</label>
+              <label for="inputEmail4">כניסה למגרש</label>
               <input type="date" className="form-control" id="inputEntranceDate" placeholder="EntranceDate" name="EntranceDate" value={car.EntranceDate} onChange={handleInputChange} required />
             </div>
             <div className="form-group col-md-6">
-              <label for="inputEmail4">Price</label>
+              <label for="inputEmail4">מחיר</label>
               <input type="number" className="form-control" id="inputPrice" placeholder="50,000" name="Price" value={car.Price} onChange={handleInputChange} required />
             </div>
             <div className="form-group col-md-6">
-              <label for="inputEmail4">Km</label>
+              <label for="inputEmail4"  dir="rtl">קילומטראז'</label>
               <input type="number" className="form-control" id="inputKm" placeholder="20000" name="Km" value={car.Km} onChange={handleInputChange} required />
             </div>
             <div className="form-group col-md-6">
-              <label for="inputEmail4">Car Number</label>
+              <label for="inputEmail4">מספר רכב</label>
               <input type="text" className="form-control" id="CarNumber" placeholder="12345234" name="carNumber" value={car.carNumber} onChange={handleInputChange} required />
             </div>
             <div className="form-group col-md-12">
-              <label for="inputEmail4">Notes</label>
+              <label for="inputEmail4">הערות</label>
               <input type="text" className="form-control" id="Notes" placeholder="Test util 2024" name="Notes" value={car.Notes} onChange={handleInputChange} required />
             </div>
             <div className="form-group col-md-12">
@@ -188,27 +193,27 @@ export default function Stock() {
             </div>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleAddCarClose}>
-                Close
+                סגור
               </Button>
-              <Button variant="primary" type="submit">Add car</Button>
+              <Button variant="primary" type="submit">הוסף</Button>
             </Modal.Footer>
           </form>
         </Modal.Body>
       </Modal>
 
-            {/* Car Exist Modal */}
-          <Modal style={{marginTop:'100px'}} show={showCarExistModal} onHide={handleCarExistModalClose} animation={false}>
+      {/* Car Exist Modal */}
+      <Modal style={{ marginTop: '100px' }} show={showCarExistModal} onHide={handleCarExistModalClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Reset Car </Modal.Title>
+          <Modal.Title>החזרת הרכב למלאי</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {Message && <small style={{ color: 'red' }}>{Message}</small>}
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleCarExistModalClose} style={{ '--bs-btn-bg': 'red', '--bs-btn-hover-bg': 'red', '--bs-btn-border-Year': 'red' }}> 
-                No
-              </Button>
-              <Button variant="primary"  onClick={ResetTheCarToStock} style={{ '--bs-btn-bg': 'green', '--bs-btn-hover-bg': 'green', '--bs-btn-border-Year': 'green' }} >Yes</Button>
-            </Modal.Footer>
+          {Message && <small style={{ color: 'red' }}>{Message}</small>}
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCarExistModalClose} style={{ '--bs-btn-bg': 'red', '--bs-btn-hover-bg': 'red', '--bs-btn-border-Year': 'red' }}>
+              לא
+            </Button>
+            <Button variant="primary" onClick={ResetTheCarToStock} style={{ '--bs-btn-bg': 'green', '--bs-btn-hover-bg': 'green', '--bs-btn-border-Year': 'green' }} >כן</Button>
+          </Modal.Footer>
         </Modal.Body>
       </Modal>
     </>

@@ -7,14 +7,9 @@ import Stock from './Stock/stockPage'
 import LoginPage from './LoginPage/LoginPage'
 import CarProfile from './CarProfile/CarProfilePage';
 import Search from './Search/SearchPage';
-import Result from './SearchResult/ResultPage'
 import ResetPassword from './ResetPassword/ResetPassword';
 function App() {
   const [user, setUser] = useState(localStorage.getItem('user'));
-// add MongoDB server .
-// add import to images 
-// add env variables .
-// change the website to hebrew .
   return (
       <>
       {user && (
@@ -29,7 +24,6 @@ function App() {
             <Route path="/Sold" element={user ? <Sold/> : <Navigate to="/LoginPage" replace />}  />
             <Route path="/CarProfile/:id" element={user ? <CarProfile/> : <Navigate to="/LoginPage" replace />} />
             <Route path="/Search/" element={user ? <Search/> : <Navigate to="/LoginPage" replace />} />
-            <Route path="/Result/" element={user ? <Result/> : <Navigate to="/LoginPage" replace />} />
             <Route path="/LoginPage" element={<LoginPage setUser={setUser}/>}/>
             <Route path="/ResetPassword" element={<ResetPassword/>}/>
         </Routes>

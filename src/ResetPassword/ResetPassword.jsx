@@ -1,40 +1,53 @@
 import React, { useState } from 'react';
-import { resetPassword, sendMail } from "../UserService";
-
+import { resetPassword, sendMail } from "../AdminService";
+import './ResetPasswordStyle.css';
+import Logo from '../GeneralStyles/Logo.png';
+import { Link } from 'react-router-dom';
 export default function ResetPassword() {
     document.title = "Bilal Motors - Reset Password";
-
     const [randomNumber, setRandomNumber] = useState(null);
     const [userRandomInput, setuserRandomInput] = useState('');
-    const [isVerified, setIsVerified] = useState(false);
     const [newPassword, setNewPassword] = useState("");
-    const [mailSent, setMailSent] = useState(false);
     const [Message, setMessage] = useState("");
-    const formStyle = {
-        margin: '20px',
-        padding: '20px',
-        border: '1px solid black'
-    };
+
+    const [mailSent, setMailSent] = useState(false);
+    const [isVerified, setIsVerified] = useState(false);
+    const [resetSuccess, setResetSuccess] = useState(false);
+
+
+    function generateRandomLetters() {
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        let result = '';
+        for (let i = 0; i < 5; i++) {
+            result += letters.charAt(Math.floor(Math.random() * letters.length));
+        }
+        return result;
+    }
+
+
     const handleSendMail = async () => {
         const random = Math.floor(Math.random() * (3000 - 50 + 1) + 50);
-        setRandomNumber(random);
-        const response = await sendMail(random);
+        const randomLetters = generateRandomLetters();
+        const randomString = random.toString() + randomLetters;
+        setRandomNumber(randomString);
+        const response = await sendMail(randomString);
         if (response) {
-            setMailSent(true); 
-            setMessage("We Send the mail ");
+            setMailSent(true);
         }
         else {
-            setMessage("unknown error");
+            setMessage("שגיאה ,תתקשר לעבד");
         }
     };
+
 
     const validateNumber = (event) => {
         event.preventDefault();
         if (userRandomInput == randomNumber) {
             setIsVerified(true);
+            setMailSent(false);
         } else {
             setIsVerified(false);
-            alert("Incorrect number, please check the mail and try again");
+            alert("מספר לא נכון , תבדוק את המייל ונסה שוב");
         }
     };
 
@@ -42,42 +55,68 @@ export default function ResetPassword() {
         event.preventDefault();
         const response = await resetPassword(newPassword);
         if (response) {
-            setMessage("The new Password Saved Successfully ");
+            setResetSuccess(true);
+            setIsVerified(false);
         }
         else {
-            setMessage("unknown error");
+            setMessage("שגיאה ,תתקשר לעבד");
         }
 
     }
 
     return (
         <>
-            {Message && <small>{Message}</small>} <br/>
-            To reset your password we're sending you an email to verify you're the real admin.<br/>
-            <button onClick={handleSendMail}>Send mail</button><br />
-            {mailSent && 
-                <div>
-                    We sent you a number in the email, type it here :
-                    <form style={formStyle} onSubmit={validateNumber}>
-                        <label> The number that you received: </label>
-                        <br/>
-                        <input type="text" onChange={e => setuserRandomInput(e.target.value)} />
-                        <br/>
-                        <button type="submit">Verify</button>
+                <div className="reset-password-container">
+                <img src={Logo} alt='Logo' className='Logo' />
+                <br />
+                {Message && <small>{Message}</small>}
+                <br />
+                <p>
+                    כדי לאפשר לך לאפס את הסיסמה, אנחנו שולחים לך מייל עם קוד חד פעמי
+                </p>
+                <button className='ResetButton' onClick={handleSendMail}>שליחת מייל</button>
+                <br />
+                {mailSent && (
+                    <div className="mail-sent-container">
+                        <p>
+                            נשלח לך קוד חד פעמי לדואר האלקטרוני שלך, תכתוב אותו כאן
+                        </p>
+                        <form onSubmit={validateNumber}>
+                            <br />
+                            <input
+                                className='resetInput'
+                                type="text"
+                                onChange={(e) => setuserRandomInput(e.target.value)}
+                                placeholder='תכתוב את הקוד כאן'
+                            />
+                            <br />
+                            <button className='ResetButton' type="submit">בדיקה</button>
+                        </form>
+                    </div>
+                )}
+                {isVerified && (
+                     <div className="mail-sent-container">
+                    <form onSubmit={handleResetPassword}>
+                        <p>סיסמה חדשה</p>
+                        <input
+                            className='resetInput'
+                            type="text"
+                            onChange={(event) => setNewPassword(event.target.value)}
+                            placeholder='תכתוב את סיסמה כאן'
+                            required
+                        />
+                        <br />
+                        <button className='ResetButton' type="submit">שינוי</button>
                     </form>
-                </div>
-            }
-            {isVerified &&
-                <form style={formStyle} onSubmit={handleResetPassword}>
-                    <label>Reset password</label>
-                    <input
-                        type="password"
-                        onChange={(event) => setNewPassword(event.target.value)}
-                        required
-                    />
-                    <button type="submit">Reset</button>
-                </form>
-            }
+                    </div>
+                )}
+                {resetSuccess && (
+                    <div className="reset-success-container">
+                        <p>!סיסמתך עודכנה בהצלחה</p>
+                        <Link className='Reset-a' to="/">לחץ כאן לחזרה לעמוד הראשי</Link>
+                    </div>
+                )}
+            </div>
         </>
     );
 }

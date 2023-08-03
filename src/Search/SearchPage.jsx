@@ -51,27 +51,27 @@ export default function SearchPage() {
     <>
       <div className='searchGridBody'>
       <div className="SearchFormDiv"> 
-      <h1 style={{textAlign:'left',marginLeft:'20px'}}> <FontAwesomeIcon icon={faBars} size='2xs'/> Search</h1>
+      <h1 style={{textAlign:'left',marginLeft:'20px'}}> <FontAwesomeIcon icon={faBars} size='2xs'/> חיפוש</h1>
         <form method="post" className='SearchForm' onSubmit={Search}>
-          <input type="text" placeholder='car ID' onChange={(event) => setCarNum(event.target.value)} /><br/>
-          <input type="text"  placeholder='car name' onChange={(event) => setCarName(event.target.value)} /><br/>
-          <input type="text"  placeholder='customer name' onChange={(event) => setCustomer(event.target.value)}/><br/>
-          <input type="submit" value="search" />
+          <input type="text" placeholder='מספר רכב' onChange={(event) => setCarNum(event.target.value)} /><br/>
+          <input type="text"  placeholder='שם רכב' onChange={(event) => setCarName(event.target.value)} /><br/>
+          <input type="text"  placeholder='שם לקוח' onChange={(event) => setCustomer(event.target.value)}/><br/>
+          <input type="submit" value="חיפוש" />
         </form>
       </div>
       <div className='ResultDiv'>
       <div className="Cars">
     {displayedCars.map((car) => (
-      <Link to={`/CarProfile/${car.id}`} style={{ color: 'black', textDecoration: 'none' }}>
+      <Link to={`/CarProfile/${car._id}`} style={{ color: 'black', textDecoration: 'none' }}>
       <div className="Carcard">
         <img className='Cardimg' src={car.Img1} alt={car.Name}/>
         <div className="container">
-          <span className="CarName" style={{fontSize:'15px'}}><b>{car.Name}</b></span>
-          <span><b>Year : </b>{car.Year}</span>
-          <span><b>hand : </b>{car.Hand} </span>
-          <span><b>Capacity : </b>{car.Capacity} </span>
-          <span><b>Km : </b>{car.Km}</span>
-        </div>
+                <span className="CarName" style={{ fontSize: '15px' }}><b>{car.Name}</b></span>
+                <span><b>:שנה </b>{car.Year}</span>
+                <span><b>:יד </b>{car.Hand}</span>
+                <span><b>:נפח מנוע </b>{car.Capacity}</span>
+                <span><b>:קילומטראז' </b>{car.Km}</span>
+              </div>
       </div>
     </Link>
         ))}
