@@ -1,9 +1,6 @@
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-
-// const API = "http://localhost:8000/Admin";
-// const API = `${process.env.API}/Admin`;
-const API = `https://main--iridescent-frangollo-bd6271.netlify.app/Admin`;
+const API = ""||"http://localhost:8000/Admin";
 export const checkPassword = async (password) => {
     try {
         const response = await axios.get(`${API}`);
