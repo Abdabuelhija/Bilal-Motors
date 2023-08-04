@@ -1,10 +1,9 @@
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-require('dotenv').config();
+
 // const API = "http://localhost:8000/Admin";
-const API = `${process.env.API}/Admin`;
-
-
+// const API = `${process.env.API}/Admin`;
+const API = `https://main--iridescent-frangollo-bd6271.netlify.app/Admin`;
 export const checkPassword = async (password) => {
     try {
         const response = await axios.get(`${API}`);

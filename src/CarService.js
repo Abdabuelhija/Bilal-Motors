@@ -1,7 +1,8 @@
 import axios from "axios";
-require('dotenv').config();
+
 // const API = "http://localhost:8000/cars";
-const API = `${process.env.API}/cars`;
+// const API = `${process.env.API}/cars`;
+const API = `https://main--iridescent-frangollo-bd6271.netlify.app/cars`;
 
 export async function fetchAllCars() {
   const response = await axios.get(`${API}`);
