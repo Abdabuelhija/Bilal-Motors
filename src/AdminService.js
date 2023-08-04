@@ -1,6 +1,9 @@
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-const API = "http://localhost:8000/Admin";
+require('dotenv').config();
+// const API = "http://localhost:8000/Admin";
+const API = `${process.env.API}/Admin`;
+
 
 export const checkPassword = async (password) => {
     try {

@@ -1,5 +1,7 @@
 import axios from "axios";
-const API = "http://localhost:8000/cars";
+require('dotenv').config();
+// const API = "http://localhost:8000/cars";
+const API = `${process.env.API}/cars`;
 
 export async function fetchAllCars() {
   const response = await axios.get(`${API}`);
