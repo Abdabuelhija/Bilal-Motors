@@ -53,9 +53,9 @@ export default function SearchPage() {
       <div className="SearchFormDiv"> 
       <h1 style={{textAlign:'left',marginLeft:'20px'}}> <FontAwesomeIcon icon={faBars} size='2xs'/> חיפוש</h1>
         <form method="post" className='SearchForm' onSubmit={Search}>
-          <input type="text" placeholder='מספר רכב' onChange={(event) => setCarNum(event.target.value)} /><br/>
-          <input type="text"  placeholder='שם רכב' onChange={(event) => setCarName(event.target.value)} /><br/>
-          <input type="text"  placeholder='שם לקוח' onChange={(event) => setCustomer(event.target.value)}/><br/>
+          <input type="text" placeholder='מספר רכב' onChange={(event) => setCarNum(event.target.value)} style={{textAlign:'center'}}/><br/>
+          <input type="text"  placeholder='שם רכב' onChange={(event) => setCarName(event.target.value)} style={{textAlign:'center'}}/><br/>
+          <input type="text"  placeholder='שם לקוח' onChange={(event) => setCustomer(event.target.value)}style={{textAlign:'center'}}/><br/>
           <input type="submit" value="חיפוש" />
         </form>
       </div>
@@ -67,10 +67,10 @@ export default function SearchPage() {
         <img className='Cardimg' src={car.Img1} alt={car.Name}/>
         <div className="container">
                 <span className="CarName" style={{ fontSize: '15px' }}><b>{car.Name}</b></span>
-                <span><b>:שנה </b>{car.Year}</span>
-                <span><b>:יד </b>{car.Hand}</span>
-                <span><b>:נפח מנוע </b>{car.Capacity}</span>
-                <span><b>:קילומטראז' </b>{car.Km}</span>
+                <span><b>שנה :</b>{car.Year}</span>
+                <span><b>יד :</b>{car.Hand}</span>
+                <span><b>נפח מנוע :</b>{car.Capacity}</span>
+                <span><b>קילומטראז': </b>{car.Km}</span>
               </div>
       </div>
     </Link>

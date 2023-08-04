@@ -134,7 +134,7 @@ export default function Stock() {
     <>
       <div className="buttons">
         <button className="orginal-button" onClick={ShowAllCars}>כל המלאי</button>
-        <button className="Entrance-button" onClick={ShowByEntranceDate}>סינון לפי תאיריך כניסה</button>
+        <button className="Entrance-button" onClick={ShowByEntranceDate}>סינון לפי כניסה למגרש</button>
         <button className="Entrance-button" onClick={ShowByPrice}>סינון לפי מחיר</button>
         <button className="Add-car" onClick={handleAddCarShow} ><FontAwesomeIcon icon={faPlus} style={{ Year: "#ffffff", }} /> הוסף רכב </button>
       </div>
@@ -147,19 +147,19 @@ export default function Stock() {
               <img className='Cardimg' src={car.Img1} alt={car.Name} />
               <div className="container">
                 <span className="CarName" style={{ fontSize: '15px' }}><b>{car.Name}</b></span>
-                <span><b>:שנה </b>{car.Year}</span>
-                <span><b>:יד </b>{car.Hand}</span>
-                <span><b>:נפח מנוע </b>{car.Capacity}</span>
-                <span><b>:קילומטראז' </b>{car.Km}</span>
+                <span><b>שנה :</b>{car.Year}</span>
+                <span><b>יד :</b>{car.Hand}</span>
+                <span><b>נפח מנוע :</b>{car.Capacity}</span>
+                <span><b>קילומטראז': </b>{car.Km}</span>
               </div>
             </div>
           </Link>
         ))}
       </div>
 
-      <Modal show={AddCarshow} onHide={handleAddCarClose} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title><br /><h1>הוספת רכה</h1></Modal.Title>
+      <Modal show={AddCarshow} onHide={handleAddCarClose} animation={false} style={{textAlign:'right'}}>
+        <Modal.Header closeButton >
+          <Modal.Title ><br /><h1 >הוספת רכה</h1></Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {Message}
@@ -200,20 +200,20 @@ export default function Stock() {
               <label for="inputEmail4">הערות</label>
               <input type="text" className="form-control" id="Notes" placeholder="Test util 2024" name="Notes" value={car.Notes} onChange={handleInputChange} required />
             </div>
-            <div className="form-group col-md-12">
-              <label for="inputAddress">Image1</label>
+            <div className="form-group col-md-6">
+              <label for="inputAddress">תמונה 1 </label>
               <input type="file" className="form-control" id="Img1" name="Img1" onChange={handleInputChange} required />
             </div>
-            <div className="form-group col-md-12">
-              <label for="inputAddress">Image2</label>
+            <div className="form-group col-md-6">
+              <label for="inputAddress">תמונה 2</label>
               <input type="file" className="form-control" id="Img2" name="Img2" onChange={handleInputChange} required />
             </div>
-            <div className="form-group col-md-12">
-              <label for="inputAddress">Image3</label>
+            <div className="form-group col-md-6">
+              <label for="inputAddress">תמונה 3</label>
               <input type="file" className="form-control" id="Img3" name="Img3" onChange={handleInputChange} required />
             </div>
-            <div className="form-group col-md-12">
-              <label for="inputAddress">Image4</label>
+            <div className="form-group col-md-6">
+              <label for="inputAddress">תמונה 4</label>
               <input type="file" className="form-control" id="Img4" name="Img4" onChange={handleInputChange} required />
             </div>
             <Modal.Footer>

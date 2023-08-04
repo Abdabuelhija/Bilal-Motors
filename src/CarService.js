@@ -66,6 +66,18 @@ export const updateCarById = async (id, carData) => {
   }
 };
 
+export const deleteCarById = async (id) => {
+  try {
+    const response = await axios.delete(`${API}/${id}`);
+    return response;
+  } 
+  catch (error) {
+    console.error("Delete Car BY ID error : " + error);
+    return error;
+  }
+};
+
+
 export const markCarAsSold = async (id, carData) => {
   try {
     const response = await axios.put(`${API}/${id}`, { ...carData, isSold: true });
@@ -96,6 +108,8 @@ export const updateIsSold_toFalse = async (car) => {
     return false;
   }
 };
+
+
 
 
 

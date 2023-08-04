@@ -2,23 +2,22 @@ import React, { useState, useEffect } from 'react';
 import './CarProfileStyle.css';
 import { Modal, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import { faShekelSign } from '@fortawesome/free-solid-svg-icons';
-import { useParams } from 'react-router-dom';
+import { faPenToSquare, faShekelSign, faTrash, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { useParams ,useNavigate} from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
-import { getCarById, updateCarById, markCarAsSold } from "../CarService";
+import { getCarById, updateCarById, markCarAsSold ,deleteCarById} from "../CarService";
 
 export default function CarProfile() {
   const { id } = useParams();
   const [index, setIndex] = useState(0);
   const [Message, setMessage] = useState("");
+  const navigate = useNavigate();
   const handleSelect = (selectedIndex) => {
     setIndex(selectedIndex);
-  }; 
-  const [oldCar,setOldCar]=useState(null);
+  };
+  const [oldCar, setOldCar] = useState(null);
   const [car, setCar] = useState({
-    _id:"",
+    _id: "",
     carNumber: "",
     Name: "",
     Year: "",
@@ -56,7 +55,7 @@ export default function CarProfile() {
     setMessage("");
     setCar(oldCar);
   }
-  
+
   const handleUpdateModalShow = () => setshowUpdateModal(true);
   const updateCarDetails = async (event) => {
     event.preventDefault();
@@ -72,14 +71,14 @@ export default function CarProfile() {
     }
   }
 
-  // Delete Modal
-  const [showDeleteModal, setshowDeleteModal] = useState(false);
-  const handleDeleteModalClose = () => {
-    setshowDeleteModal(false);
+  // Sold Modal
+  const [showSoldModal, setshowSoldModal] = useState(false);
+  const handleSoldModalClose = () => {
+    setshowSoldModal(false);
     setMessage("");
     setCar(oldCar);
   }
-  const handleDeleteModalShow = () => setshowDeleteModal(true);
+  const handleSoldModalShow = () => setshowSoldModal(true);
   const SoldCar = async (event) => {
     event.preventDefault();
     try {
@@ -102,24 +101,41 @@ export default function CarProfile() {
     }));
   };
 
+  const DeleteCar = async (event) => {
+    let userConfirmation = window.confirm(" ?  האם אתה בטוח שברצונך למחוק את הרכב?");
+    if(userConfirmation) {
+      const response = await deleteCarById(id);
+      if(response.status === 200) {
+        alert("המחיקה בוצעה בהצלחה");
+        navigate("/Stock");
+      }
+      else {
+        console.log(`Error in deleting the car: ${response}`);
+      }
+    }
+    else {
+      // The user clicked "Cancel", so we don't do anything
+    }
+  }
+  
+
   // Make a normal Date not like Date in MongoDB
   function formatDate(dateStr) {
     let date = new Date(dateStr);
-    return date.getUTCFullYear() + '-' + 
-      String(date.getUTCMonth() + 1).padStart(2, '0') + '-' + 
+    return date.getUTCFullYear() + '-' +
+      String(date.getUTCMonth() + 1).padStart(2, '0') + '-' +
       String(date.getUTCDate()).padStart(2, '0');
   }
 
   return (
     <>
       {/* Update Modal */}
-      <Modal show={showUpdateModal} onHide={handleUpdateModalClose} animation={false}>
+      <Modal show={showUpdateModal} onHide={handleUpdateModalClose} animation={false} style={{ textAlign: 'center' }}>
         <Modal.Header closeButton>
           <Modal.Title><br /><h2>עדכן נתוני הרכב</h2></Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {Message && <small style={{ color: 'green' }}>{Message}</small>}
-
+          {Message && <small style={{ color: 'green' }}>{Message}</small>}
           <form class="row" onSubmit={updateCarDetails}>
             <div class="form-group col-md-6">
               <label for="inputName">שם רכב</label>
@@ -161,22 +177,6 @@ export default function CarProfile() {
               <input type="text" class="form-control" name="Notes" id="Notes" value={car.Notes} onChange={handleInputChange} required />
             </div>
 
-            <div class="form-group col-md-12">
-              <label for="inputImg1">image1 url</label>
-              <input type="text" class="form-control" name="Img1" id="inputImg1" value={car.Img1} onChange={handleInputChange} required />
-            </div>
-            <div class="form-group col-md-12">
-              <label for="inputImg2">image2 url</label>
-              <input type="text" class="form-control"  name="Img2" id="inputImg2" value={car.Img2} onChange={handleInputChange} required />
-            </div>
-            <div class="form-group col-md-12">
-              <label for="inputImg3">image3 url</label>
-              <input type="text" class="form-control" name="Img3" id="inputImg3" value={car.Img3} onChange={handleInputChange} required />
-            </div>
-            <div class="form-group col-md-12">
-              <label for="inputImg4">image4 url</label>
-              <input type="text" class="form-control"  name="Img4" id="inputImg4" value={car.Img4} onChange={handleInputChange} required />
-            </div>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleUpdateModalClose}>סגור</Button>
               <Button variant="primary" type="submit" style={{ '--bs-btn-bg': '#1C5F8C', '--bs-btn-hover-bg': '#1C5F8C', '--bs-btn-border-Year': '#1C5F8C' }} >עדכן</Button>
@@ -185,13 +185,13 @@ export default function CarProfile() {
         </Modal.Body>
       </Modal>
 
-      {/* Delete Modal */}
-      <Modal show={showDeleteModal} onHide={handleDeleteModalClose} animation={false}>
+      {/* Sold Modal */}
+      <Modal show={showSoldModal} onHide={handleSoldModalClose} animation={false} style={{ textAlign: 'right' }}>
         <Modal.Header closeButton>
           <Modal.Title>עדכו רכב לנמכר</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {Message && <small style={{ color: 'green' }}>{Message}</small>}
+          {Message && <small style={{ color: 'green' }}>{Message}</small>}
           <form class="row" onSubmit={SoldCar}>
             <div class="form-group col-md-6">
               <label for="inputImg1">שם לקוח  </label>
@@ -202,7 +202,7 @@ export default function CarProfile() {
               <input type="date" class="form-control" id="inputImg1" name="SellingDate" value={car.SellingDate} onChange={handleInputChange} required />
             </div>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleDeleteModalClose}>
+              <Button variant="secondary" onClick={handleSoldModalClose}>
                 סגור
               </Button>
               <Button variant="primary" type="submit" style={{ '--bs-btn-bg': 'red', '--bs-btn-hover-bg': 'red', '--bs-btn-border-Year': 'red' }}>מכור</Button>
@@ -210,56 +210,57 @@ export default function CarProfile() {
           </form>
         </Modal.Body>
       </Modal>
-      <h1>{car.Name}</h1><br/>
+      <h1>{car.Name}</h1><br />
       <div className="Body-container">
-          <Carousel activeIndex={index} onSelect={handleSelect} style={{width:'800px',textAlign:'center'}}>
-            <Carousel.Item>
-              <img src={car.Img1} className='ImageSlider'/>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img src={car.Img2} className='ImageSlider'/>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img src={car.Img3} className='ImageSlider'/>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img src={car.Img4} className='ImageSlider'/>
-            </Carousel.Item>
-          </Carousel>
+        <Carousel activeIndex={index} onSelect={handleSelect} style={{ width: '59%', textAlign: 'center' }}>
+          <Carousel.Item>
+            <img src={car.Img1} className='ImageSlider' />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img src={car.Img2} className='ImageSlider' />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img src={car.Img3} className='ImageSlider' />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img src={car.Img4} className='ImageSlider' />
+          </Carousel.Item>
+        </Carousel>
         <div className="informations">
-          <div >
+          <div style={{ textAlign: 'right' }}>
             <span><b>שנה : </b>{car.Year}</span><br />
             <span><b> יד:</b> {car.Hand}</span><br />
             <span><b>נפח : </b>{car.Capacity}</span><br />
             <span><b> קילומ:</b> {car.Km}</span><br />
             <span><b>  כניסה למגרש:</b> {formatDate(car.EntranceDate)}</span><br />
             <span><b> מספר רכב:</b> {car.carNumber}</span><br />
-            <span><b> במלאי ? :</b> {car.isSold.toString()} </span><br />
             {car.isSold === true && (
               <>
                 <span><b> שם הלקוח:</b> {car.CustomerName}</span><br />
                 <span><b> SellingDate:</b> {formatDate(car.SellingDate)}</span><br />
               </>
             )}
-            <span><b> מחיר:</b> {car.Price}<FontAwesomeIcon icon={faShekelSign} size="xs" /></span><br />
+            <span><b> מחיר:</b> <FontAwesomeIcon icon={faShekelSign} size="xs" />{car.Price} </span><br />
             <span><b> הערות:</b> {car.Notes}</span><br />
             <br />
             <div className='Buttons'>
               {car.isSold === false && (
                 <>
-                  <button className="Delete-button" onClick={handleDeleteModalShow}>
-                    <FontAwesomeIcon icon={faTrash} style={{ color: "#ffffff" }} /> מכור
+                  <button className="Sold-button" onClick={handleSoldModalShow}>
+                    <FontAwesomeIcon icon={faClockRotateLeft} style={{ color: "#ffffff", }} /> מכור
                   </button>
                   <button className="Update-button" onClick={handleUpdateModalShow}>
                     <FontAwesomeIcon icon={faPenToSquare} style={{ color: "#ffffff" }} /> עדכן
                   </button>
                 </>
               )}
-
             </div>
+            <button className="Delete-button" onClick={DeleteCar}>
+              <FontAwesomeIcon icon={faTrash} style={{ color: "#ffffff" }} /> מחק
+            </button>
           </div>
         </div>
-        </div>
+      </div>
 
 
     </>
