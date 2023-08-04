@@ -31,6 +31,8 @@ export default function CarProfile() {
     Notes: "",
     Img1: "",
     Img2: "",
+    Img3: "",
+    Img4: "",
     Price: 0,
     Km: 0,
   });
@@ -167,7 +169,14 @@ export default function CarProfile() {
               <label for="inputImg2">image2 url</label>
               <input type="text" class="form-control"  name="Img2" id="inputImg2" value={car.Img2} onChange={handleInputChange} required />
             </div>
-
+            <div class="form-group col-md-12">
+              <label for="inputImg3">image3 url</label>
+              <input type="text" class="form-control" name="Img3" id="inputImg3" value={car.Img3} onChange={handleInputChange} required />
+            </div>
+            <div class="form-group col-md-12">
+              <label for="inputImg4">image4 url</label>
+              <input type="text" class="form-control"  name="Img4" id="inputImg4" value={car.Img4} onChange={handleInputChange} required />
+            </div>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleUpdateModalClose}>סגור</Button>
               <Button variant="primary" type="submit" style={{ '--bs-btn-bg': '#1C5F8C', '--bs-btn-hover-bg': '#1C5F8C', '--bs-btn-border-Year': '#1C5F8C' }} >עדכן</Button>
@@ -183,7 +192,6 @@ export default function CarProfile() {
         </Modal.Header>
         <Modal.Body>
         {Message && <small style={{ color: 'green' }}>{Message}</small>}
-
           <form class="row" onSubmit={SoldCar}>
             <div class="form-group col-md-6">
               <label for="inputImg1">שם לקוח  </label>
@@ -212,13 +220,10 @@ export default function CarProfile() {
               <img src={car.Img2} className='ImageSlider'/>
             </Carousel.Item>
             <Carousel.Item>
-              <img src={car.Img2} className='ImageSlider'/>
+              <img src={car.Img3} className='ImageSlider'/>
             </Carousel.Item>
             <Carousel.Item>
-              <img src={car.Img2} className='ImageSlider'/>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img src={car.Img2} className='ImageSlider'/>
+              <img src={car.Img4} className='ImageSlider'/>
             </Carousel.Item>
           </Carousel>
         <div className="informations">

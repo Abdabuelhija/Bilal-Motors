@@ -1,5 +1,4 @@
 import axios from "axios";
-// const API = "https://64620338491f9402f4b02aa1.mockapi.io/Cars";
 const API = "http://localhost:8000/cars";
 
 export async function fetchAllCars() {
@@ -40,6 +39,8 @@ const newCar={
   Notes:car.Notes,
   Img1:car.Img1,
   Img2:car.Img2,
+  Img3:car.Img3,
+  Img4:car.Img4,
   Price:car.Price,
   Km:car.Km
 };
@@ -48,12 +49,12 @@ const newCar={
 }
 }
 
-
-
-
-
-
-
+export async function uploadImage(image) {
+  const formData = new FormData();
+  formData.append('image', image);
+    const result = await axios.post(`${API}/getImg`,formData);
+    return result.data.secure_url;
+};
 
 export const updateCarById = async (id, carData) => {
   try {
@@ -94,6 +95,8 @@ export const updateIsSold_toFalse = async (car) => {
     return false;
   }
 };
+
+
 
 
 
