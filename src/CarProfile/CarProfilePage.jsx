@@ -55,7 +55,6 @@ export default function CarProfile() {
     setMessage("");
     setCar(oldCar);
   }
-
   const handleUpdateModalShow = () => setshowUpdateModal(true);
   const updateCarDetails = async (event) => {
     event.preventDefault();

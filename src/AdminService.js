@@ -1,6 +1,7 @@
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-const API = ""||"http://localhost:8000/Admin";
+
+const API ="https://bilal-motors.onrender.com/"
 export const checkPassword = async (password) => {
     try {
         const response = await axios.get(`${API}`);

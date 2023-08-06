@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API =""||"http://localhost:8000/cars";
-
+const API ="https://bilal-motors.onrender.com/"
 export async function fetchAllCars() {
   const response = await axios.get(`${API}`);
   return response.data;
