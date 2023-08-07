@@ -8,14 +8,14 @@ import LoginPage from './LoginPage/LoginPage'
 import CarProfile from './CarProfile/CarProfilePage';
 import Search from './Search/SearchPage';
 import ResetPassword from './ResetPassword/ResetPassword';
-import { validAdmin } from './AdminService';
+import { checkPassword } from './AdminService';
 function App() {
 
   const [user, setUser] = useState(localStorage.getItem('user'));
   useEffect(() => {
     const checkPasswordAndDelete = async () => {
       if (user) {
-        const passwordCheckResult = await validAdmin(user.Password);
+        const passwordCheckResult = await checkPassword(user.Password);
         if (passwordCheckResult === null) {
           localStorage.removeItem('user');
         }

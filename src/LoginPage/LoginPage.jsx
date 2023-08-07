@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './LoginStyle.css';
 import Logo from '../GeneralStyles/Logo.png';
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { validAdmin } from '../AdminService';
+import { checkPassword } from '../AdminService';
 export default function LoginPage({ setUser }) {
   document.title = "Bilal Motors - Login";
   const [inputValue, setInputValue] = useState('');
@@ -11,9 +11,7 @@ export default function LoginPage({ setUser }) {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    await validAdmin(inputValue);
-    // const user = await checkPassword(inputValue);
-    const user = await validAdmin(inputValue);
+    const user = await checkPassword(inputValue);
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
       setUser(localStorage.getItem('user'));
