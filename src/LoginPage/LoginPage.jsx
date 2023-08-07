@@ -13,14 +13,15 @@ export default function LoginPage({ setUser }) {
     event.preventDefault();
     await validAdmin(inputValue);
     // const user = await checkPassword(inputValue);
-    // if (user) {
-    //   localStorage.setItem('user', JSON.stringify(user));
-    //   setUser(localStorage.getItem('user'));
-    //   navigate("/");
-    // }
-    //  else {
-    //   setMessage("Wrong password");
-    // }
+    const user = await validAdmin(inputValue);
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+      setUser(localStorage.getItem('user'));
+      navigate("/");
+    }
+     else {
+      setMessage("Wrong password");
+    }
   };
 
   return (
