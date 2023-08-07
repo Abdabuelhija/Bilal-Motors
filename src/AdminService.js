@@ -14,6 +14,21 @@ const setJWTToken = (token) => {
     }
 };
 
+// export const checkPassword = async (password) => {
+//     try {
+//         const response = await axios.get(`${API}`);
+//         if (response.data[0].Password == password) {
+//             const isAdminValid=await validAdmin(response.data[0].Email,response.data[0].Password);
+//             if (isAdminValid)
+//             return response.data[0];
+//         }
+//         return null;
+//     }
+//     catch (error) {
+//         console.error("Unable to check password:", error);
+//         return null;
+//     }
+// };
 
 export const validAdmin = async (password) => {
     try {
