@@ -16,7 +16,8 @@ export default function LoginPage({ setUser }) {
       localStorage.setItem('user', JSON.stringify(user));
       setUser(localStorage.getItem('user'));
       navigate("/");
-    } else {
+    }
+     else {
       setMessage("Wrong password");
     }
   };
