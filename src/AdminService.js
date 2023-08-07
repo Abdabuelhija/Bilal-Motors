@@ -2,19 +2,38 @@ import { faL } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 const API ="https://bilal-motors.onrender.com/Admin"
-export const checkPassword = async (password) => {
-    try {
-        const response = await axios.get(`${API}`);
-        if (response.data[0].Password == password) {
-            return response.data[0];
-        }
-        return null;
+
+// for the passport
+axios.defaults.baseURL = API;
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+const setJWTToken = (token) => {
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    } else {
+        delete axios.defaults.headers.common['Authorization'];
     }
+};
+
+
+export const validAdmin = async (password) => {
+    try {
+        const response = await axios.post(`${API}/login`, {password });
+        console.log(response);
+        // if (response.data && response.data.token) {
+        //     const token = response.data.token;
+        //     localStorage.setItem('jwtToken', token);
+        //     setJWTToken(token);
+        //     return true;
+        // } 
+        // return null;
+    } 
     catch (error) {
         console.error("Unable to check password:", error);
         return null;
     }
 };
+
+
 
 export const resetPassword = async (password) => {
     try {
@@ -48,6 +67,7 @@ export const sendMail = async (random) => {
         return false;
     }
 };
+
 
 
 
