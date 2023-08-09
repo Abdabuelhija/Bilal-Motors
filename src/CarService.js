@@ -9,8 +9,6 @@ export async function fetchAllCars() {
   return response.data;
 }
 
-
-
 export const getCarById = async (id) => {
   try {
     const response = await axios.get(`${API}/${id}`);
