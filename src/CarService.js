@@ -5,7 +5,7 @@ const API ="https://bilal-motors.onrender.com/cars"
 
 
 export async function fetchAllCars() {
-  const response = await axios.get(`${API}`,{ withCredentials: true });
+  const response = await axios.get(`${API}`);
   return response.data;
 }
 

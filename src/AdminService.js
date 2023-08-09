@@ -7,7 +7,7 @@ const API ="https://bilal-motors.onrender.com/Admin"
 
 export const checkPassword = async (password) => {
     try {
-        const response = await axios.post(`${API}/login`, {password}, { withCredentials: true });
+        const response = await axios.post(`${API}/login`, {password});
         if (response.status === 200) {
             return response.data;
         }
