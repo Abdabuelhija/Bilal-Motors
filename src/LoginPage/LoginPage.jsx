@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './LoginStyle.css';
 import Logo from '../GeneralStyles/Logo.png';
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { checkPassword } from '../AdminService';
+import {checkPassword } from '../AdminService';
 export default function LoginPage({ setUser }) {
   document.title = "Bilal Motors - Login";
   const [inputValue, setInputValue] = useState('');
