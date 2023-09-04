@@ -3,6 +3,7 @@ import axios from "axios";
 const API ="https://bilal-motors.onrender.com/cars"
 // const API ="http://localhost:8000/cars"
 
+axios.defaults.withCredentials = true;
 
 export async function fetchAllCars() {
   const response = await axios.get(`${API}`);

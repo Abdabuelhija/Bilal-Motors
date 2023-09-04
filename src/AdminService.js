@@ -1,14 +1,12 @@
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-
 const API ="https://bilal-motors.onrender.com/Admin"
 // const API ="http://localhost:8000/Admin"
-
-
 export const checkPassword = async (password) => {
     try {
         const response = await axios.post(`${API}/login`, {password});
         if (response.status === 200) {
+            console.log(response);
             return response.data;
         }
         return null;
